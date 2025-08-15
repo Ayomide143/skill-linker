@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Application from "@/models/applicationModel";
+import interviewRequest from "@/models/interviewRequestModel";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function GET(req: NextRequest) {
@@ -23,7 +24,18 @@ export async function GET(req: NextRequest) {
       status: app.status,
       appliedAt: app.appliedAt,
     }));
-    return NextResponse.json(formatted);
+    const interviewRequests = await interviewRequest.find({ freelancerId, jobId: { $in: applications.map(app => app.jobId._id) } })
+      .populate("jobId", "title status")
+      .lean();
+    // Format interview requests
+    const formattedInterviewRequests = interviewRequests.map((req: any) => ({
+      _id: req._id,
+      jobId: req.jobId._id,
+      jobTitle: req.jobId.title,
+      status: req.status,
+    }));
+
+    return NextResponse.json({formatted, formattedInterviewRequests}, { status: 200 });
   } catch (error) {
     console.error("Error fetching applications:", error);
     return NextResponse.json(

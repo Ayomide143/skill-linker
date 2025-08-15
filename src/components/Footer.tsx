@@ -37,7 +37,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/home/freelancers/messages"
+                href="/home/messages"
                 className="hover:text-indigo-400 transition"
               >
                 Messages

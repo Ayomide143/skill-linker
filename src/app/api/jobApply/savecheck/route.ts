@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 export async function POST(request: NextRequest) {
   const { jobId, freelancerId } = await request.json();
   if (!jobId || !freelancerId) {
-    return NextResponse.json({ applied: false });
+    return NextResponse.json({ saved: false });
   }
   await connectDB();
   const jobObjectId = new mongoose.Types.ObjectId(jobId);
@@ -15,5 +15,5 @@ export async function POST(request: NextRequest) {
     jobId: jobObjectId,
     freelancerId: freelancerObjectId,
   });
-  return NextResponse.json({ applied: !!existing });
+  return NextResponse.json({ saved: !!existing });
 }

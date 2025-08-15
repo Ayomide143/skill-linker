@@ -109,7 +109,7 @@ export default function Navbar() {
               Applications
             </Link>
             <Link
-              href="/home/freelancers/messages"
+              href="/home/messages"
               className="text-black-700 font-medium hover:text-indigo-900 transition"
             >
               Messages
@@ -425,7 +425,7 @@ export default function Navbar() {
         </Link>
         <div className="border-t mx-6" />
         <Link
-          href="/home/freelancers/messages"
+          href="/home/messages"
           className="flex items-center gap-3 px-6 py-3 text-indigo-700 font-medium"
           onClick={() => setMobileMenuOpen(false)}
         >

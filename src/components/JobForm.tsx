@@ -50,7 +50,7 @@ export default function JobForm() {
 
     try {
       const res = await axios.post(
-        "/api/helpers/jobDetails",
+        "/api/helpers/jobs/jobDetails",
         {
           ...form,
           tags: form.tags.split(",").map((tag) => tag.trim()),

@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/db";
 import Job from "@/models/jobModel";
 
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
-    const {id}  = await params;
+    const {id}  = params;
     if (!id) {
         return NextResponse.json({error: "Job ID is required"}, {status: 400});
     }
