@@ -7,7 +7,8 @@ export interface IUser extends Document {
   country: string;
   phone: string;
   password: string;
-  role: "freelancer" | "client";
+  role: "freelancer" | "client" | "admin";
+  isBlocked?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,6 +22,7 @@ const UserSchema: Schema = new Schema(
     phone: { type: String, required: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["freelancer", "client", "admin"], required: true },
+    isBlocked: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

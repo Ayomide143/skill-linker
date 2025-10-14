@@ -24,7 +24,11 @@ export async function GET(req: NextRequest) {
       status: app.status,
       appliedAt: app.appliedAt,
     }));
-    const interviewRequests = await interviewRequest.find({ freelancerId, jobId: { $in: applications.map(app => app.jobId._id) } })
+    const interviewRequests = await interviewRequest
+      .find({
+        freelancerId,
+        jobId: { $in: applications.map((app) => app.jobId._id) },
+      })
       .populate("jobId", "title status")
       .lean();
     // Format interview requests
@@ -35,7 +39,13 @@ export async function GET(req: NextRequest) {
       status: req.status,
     }));
 
-    return NextResponse.json({formatted, formattedInterviewRequests}, { status: 200 });
+    return NextResponse.json(
+      {
+        applications: formatted,
+        interviewRequests: formattedInterviewRequests,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error fetching applications:", error);
     return NextResponse.json(

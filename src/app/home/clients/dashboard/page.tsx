@@ -55,7 +55,7 @@ export default function ClientsPage() {
         </h1>
         <div className="mb-6 flex flex-col justify-between sm:flex-row items-left gap-4">
           <p className="text-gray-600 text-lg">
-            Good afternoon, Client. Ready to hire?
+            Good day, Client. Ready to hire?
           </p>
           <a href="/home/clients/post-job">
             <button className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg font-semibold shadow hover:from-indigo-700 hover:to-blue-600 cursor-pointer transition">

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const conversationSchema = new mongoose.Schema({
+  chatId: { type: String, required: true, unique: true },
   interviewRequestId: {type: mongoose.Schema.Types.ObjectId, ref: 'InterviewRequest'},
   participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }],
   lastMessage: { type: mongoose.Schema.Types.ObjectId, ref: 'Message' },

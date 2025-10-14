@@ -13,17 +13,43 @@ export default function JobApplicationsPage({ jobId }: { jobId: string }) {
   const [job, setJob] = useState<{ title?: string } | null>(null);
   const [interview, setInterview] = useState<string | null>(null);
   const [hire, setHire] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!jobId) return;
 
-    fetch(`/api/helpers/clientJobDetails/${jobId}`)
-      .then((res) => res.json())
-      .then((data) => setJob(data));
+    const fetchData = async () => {
+      try {
+        setLoading(true); 
+        setError(null);
 
-    fetch(`/api/helpers/getApplication?jobId=${jobId}`)
-      .then((res) => res.json())
-      .then((data) => setApplications(Array.isArray(data) ? data : []));
+        // Fetch job details
+        const jobResponse = await fetch(`/api/helpers/clientJobDetails?jobId=${jobId}`);
+        if (!jobResponse.ok) {
+          throw new Error("Failed to fetch job details");
+        }
+        const jobData = await jobResponse.json();
+        setJob(jobData);
+
+        // Fetch applications
+        const applicationsResponse = await fetch(
+          `/api/helpers/getApplication?jobId=${jobId}`
+        );
+        if (!applicationsResponse.ok) {
+          throw new Error("Failed to fetch applications");
+        }
+        const applicationsData = await applicationsResponse.json();
+        setApplications(Array.isArray(applicationsData) ? applicationsData : []);
+      } catch (err: any) {
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data.");
+      } finally {
+        setLoading(false); // Set loading to false after fetch completes
+      }
+    };
+
+    fetchData();
   }, [jobId]);
 
   const handleInterview = (freelancerId: string) => {
@@ -50,7 +76,11 @@ export default function JobApplicationsPage({ jobId }: { jobId: string }) {
         Applications for {job?.title || "this job"}
       </h1>
 
-      {applications.length > 0 ? (
+      {loading ? (
+        <p className="text-gray-500">Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : applications.length > 0 ? (
         applications.map((app) => (
           <div key={app._id} className="border rounded p-4 mb-4">
             <div className="font-semibold">{app.freelancerName}</div>

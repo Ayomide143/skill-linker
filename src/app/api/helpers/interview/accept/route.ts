@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
     if (!interviewRequestId) {
     return NextResponse.json({ error: "Missing interviewRequestId" }, { status: 400 });
   }
+  console.log(interviewRequestId);
     try {
     const interviewRequest = await InterviewRequest.findById(interviewRequestId);
     if (!interviewRequest) {
@@ -22,3 +23,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+// accepting interview request gave 404 error code 

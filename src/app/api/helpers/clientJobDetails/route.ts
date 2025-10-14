@@ -9,13 +9,11 @@ export async function GET(req: NextRequest) {
   if (!jobId) {
     return NextResponse.json({ error: "Job ID is required" }, { status: 400 });
   }
-
   try {
     const job = await Job.findById(jobId).select("title description status");
     if (!job) {
       return NextResponse.json({ error: "Job not found" }, { status: 404 });
     }
-    
     return NextResponse.json(job);
   } catch (error) {
     console.error("Error fetching job:", error);
