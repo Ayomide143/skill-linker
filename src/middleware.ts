@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/home/freelancers/find-work", request.url));
   }
 
-  if (role === "freelancer" && pathname.startsWith("/home/admin")) {
+  if (role === "freelancer" && pathname.startsWith("/home/admins")) {
     return NextResponse.redirect(new URL("/home/freelancers/find-work", request.url));
   }
 
@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/home/clients/dashboard", request.url));
   }
 
-  if (role === "client" && pathname.startsWith("/home/admin")) {
+  if (role === "client" && pathname.startsWith("/home/admins")) {
     return NextResponse.redirect(new URL("/home/clients/dashboard", request.url));
   }
 

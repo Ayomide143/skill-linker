@@ -21,7 +21,6 @@ export default function Login() {
       console.log("Login successful:", response.data);
       const { user } = response.data;
       if (response.data.success) {
-        // Save user info in localStorage or context
         localStorage.setItem("userId", user.id);
       }
 
@@ -29,8 +28,10 @@ export default function Login() {
         router.push("/home/clients/dashboard"); //Redirect to client dashboard
       } else if (user.role === "freelancer") {
         router.push("/home/freelancers/find-work"); //Redirect to freelancer dashboard
+      } else if (user.role === "admin") {
+        router.push("/home/admins/dashboard"); //Redirect to admin dashboard
       } else {
-        router.push("/");
+        router.push("/"); //Fallback redirect
       }
     } catch (error: any) {
       console.error("Login error:", error.message);

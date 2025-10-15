@@ -1,63 +1,129 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { MdLogout } from "react-icons/md";
 import {
   FaUsers,
   FaBriefcase,
   FaDollarSign,
   FaChartBar,
   FaCog,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle the menu
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get("/api/auth/logout");
+      toast.success("Logout successful!");
+      if (!response) {
+        throw new Error("Logout failed");
+      }
+      // Redirect to login page after successful logout
+      router.push("/auth/login");
+      console.log("Logout successful:", response.data);
+    } catch (error) {
+      console.error("Error during logout:", error);
+      toast.error("An error occurred during logout. Please try again.");
+      return;
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
+      <Toaster position="top-right" reverseOrder={false} />
+
+      {/* Mobile Navbar */}
+      <div className="md:hidden bg-[#202C33] text-white flex items-center justify-between px-4 py-3">
+        <h1 className="text-xl font-bold">Admin Panel</h1>
+        <button
+          onClick={toggleMenu}
+          className="text-white text-2xl cursor-pointer"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
+
       {/* Sidebar */}
-      <aside className="w-full md:w-1/4 bg-[#202C33] text-white">
-        <div className="flex items-center justify-center py-6 border-b border-gray-700">
+      <aside
+        className={`w-full md:w-1/4 bg-[#202C33] text-white md:block ${
+          isMenuOpen ? "block" : "hidden"
+        } transition-transform duration-300 ease-in-out`}
+      >
+        <div
+          className={`flex items-center justify-center py-6 border-b border-gray-700 ${
+            isMenuOpen ? "hidden" : "block"
+          }`}
+        >
           <h1 className="text-2xl font-bold">Admin Panel</h1>
         </div>
         <nav className="flex flex-col gap-4 p-4">
           <button
             className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-700"
-            onClick={() => router.push("/home/admins/dashboard/manage/users")}
+            onClick={() => {
+              router.push("/home/admins/dashboard/manage/users");
+              setIsMenuOpen(false); // Close menu on link click
+            }}
           >
             <FaUsers />
             <span>Manage Users</span>
           </button>
           <button
             className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-700"
-            onClick={() => router.push("/home/admins/dashboard/manage/jobs")}
+            onClick={() => {
+              router.push("/home/admins/dashboard/manage/jobs");
+              setIsMenuOpen(false); // Close menu on link click
+            }}
           >
             <FaBriefcase />
             <span>Manage Jobs</span>
           </button>
           <button
             className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-700"
-            onClick={() =>
-              router.push("/home/admins/dashboard/manage/payments")
-            }
+            onClick={() => {
+              router.push("/home/admins/dashboard/manage/payments");
+              setIsMenuOpen(false); // Close menu on link click
+            }}
           >
             <FaDollarSign />
             <span>Payments</span>
           </button>
           <button
             className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-700"
-            onClick={() => router.push("/home/admins/dashboard/manage/reports")}
+            onClick={() => {
+              router.push("/home/admins/dashboard/manage/reports");
+              setIsMenuOpen(false); // Close menu on link click
+            }}
           >
             <FaChartBar />
             <span>Reports</span>
           </button>
           <button
             className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-700"
-            onClick={() =>
-              router.push("/home/admins/dashboard/manage/settings")
-            }
+            onClick={() => {
+              router.push("/home/admins/dashboard/manage/settings");
+              setIsMenuOpen(false); // Close menu on link click
+            }}
           >
             <FaCog />
             <span>Settings</span>
+          </button>
+          <button
+            className="flex text-red-500 items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-700"
+            onClick={() => handleLogout()}
+          >
+            <MdLogout />
+            <span>Logout</span>
           </button>
         </nav>
       </aside>
@@ -66,12 +132,7 @@ export default function AdminDashboard() {
       <main className="flex-1 p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Welcome, Admin
-          </h2>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500">
-            Add New
-          </button>
+          <h2 className="text-2xl font-bold text-gray-800">Welcome, Admin</h2>
         </div>
 
         {/* Stats Section */}
