@@ -17,22 +17,21 @@ import {
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [adminName, setAdminName] = useState("");
 
   useEffect(() => {
     // Fetch admin details if needed
     const fetchAdminDetails = async () => {
-      axios.get("/api/admin/users")
-        .then((response) => {
-          setAdminName(response.data.username);
-        })
-        .catch((error) => {
-          console.error("Error fetching admin details:", error);
-        });
+      try {
+        const response = await axios.get("/api/admin/info");
+        setAdminName(response.data.username); 
+      } catch (error) {
+        console.error("Error fetching admin details:", error);
       }
+    };
     fetchAdminDetails();
-  });
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -147,7 +146,9 @@ export default function AdminDashboard() {
       <main className="flex-1 p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">Welcome, {adminName}</h2>
+          <h2 className="text-2xl font-bold text-gray-800">
+            Welcome, {adminName || "Admin"}!
+          </h2>
         </div>
 
         {/* Stats Section */}
