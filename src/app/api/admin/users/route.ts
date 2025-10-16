@@ -6,14 +6,15 @@ import User from "@/models/userModel";
 export async function GET() {
   try {
     await connectDB();
-    const users = await User.find({}, "name role isBlocked")
+    const users = await User.find({}, "name username role isBlocked")
       .lean()
-      .select({ _id: 1, name: 1, role: 1, isBlocked: 1 }) 
+      .select({ _id: 1, name: 1, username: 1, role: 1, isBlocked: 1 }) 
       .exec();
 
     const formattedUsers = users.map((user) => ({
       id: user._id.toString(), // Convert _id to string and rename to id
       name: user.name,
+      username: user.username,
       role: user.role,
       isBlocked: user.isBlocked,
     }));
