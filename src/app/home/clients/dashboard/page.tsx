@@ -49,7 +49,7 @@ export default function ClientsPage() {
   return (
     <>
       <Clientnav />
-      <div className="px-19 py-6">
+      <div className="px-10 py-6">
         <h1 className="text-3xl sm:text-4xl font-bold text-indigo-700 mb-2">
           Clients Page
         </h1>
