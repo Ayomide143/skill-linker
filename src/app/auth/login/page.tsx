@@ -92,14 +92,25 @@ export default function Login() {
               </button>
             </div>
           </div>
-          <button
-            type="submit"
-            onClick={handleLogin}
-            disabled={loading}
-            className="w-full mt-4 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-bold rounded-lg shadow-lg hover:from-indigo-700 hover:to-blue-600 transition-all cursor-pointer"
-          >
-            {loading ? "Logging in..." : "Sign In"}
-          </button>
+          <div className="text-right mt-2">
+            <a
+              href="/auth/forgot-password"
+              className="text-sm text-indigo-600 hover:underline"
+            >
+              Forgot Password?
+            </a>
+          </div>
+          <div className="flex justify-between items-center">
+            <button
+              type="submit"
+              onClick={handleLogin}
+              disabled={loading}
+              className="w-full mt-2 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-bold rounded-lg shadow-lg hover:from-indigo-700 hover:to-blue-600 transition-all cursor-pointer"
+            >
+              {loading ? "Logging in..." : "Sign In"}
+            </button>
+          </div>
+
           <div>
             <div className="flex items-center my-6">
               <hr className="flex-grow border-gray-300" />
