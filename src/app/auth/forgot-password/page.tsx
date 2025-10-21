@@ -6,16 +6,29 @@ import { toast, Toaster } from "react-hot-toast";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null); 
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null); 
+
     try {
-      const response = await axios.post("/api/auth/forgot-password", { email });
+      const response = await axios.post("/api/auth/forgot-pass", { email });
       toast.success("Password reset link sent to your email.");
-    } catch (error) {
-      console.error("Error sending password reset link:", error);
-      toast.error("Failed to send password reset link. Please try again.");
+    } catch (err: any) {
+      console.error("Error sending password reset link:", err);
+
+      // Handle specific error cases
+      if (err.response && err.response.status === 404) {
+        setError("No user found with this email.");
+      } else if (err.response && err.response.status === 400) {
+        setError("Invalid email address. Please try again.");
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+      }
+
+      toast.error("Failed to send password reset link.");
     } finally {
       setLoading(false);
     }
@@ -38,14 +51,23 @@ export default function ForgotPassword() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                error ? "border-red-500 focus:ring-red-400" : "focus:ring-indigo-400"
+              }`}
               placeholder="Enter your email"
             />
+            {error && (
+              <p className="text-sm text-red-500 mt-1">{error}</p>
+            )}
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-all"
+            className={`w-full py-2 font-bold rounded-lg transition-all ${
+              loading
+                ? "bg-indigo-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+            }`}
           >
             {loading ? "Sending..." : "Send Reset Link"}
           </button>

@@ -23,6 +23,8 @@ const UserSchema: Schema = new Schema(
     password: { type: String, required: true },
     role: { type: String, enum: ["freelancer", "client", "admin"], required: true },
     isBlocked: { type: Boolean, default: false },
+    resetPasswordToken: { type: String },
+    resetPasswordTokenExpires: { type: Date },
   },
   { timestamps: true }
 );
